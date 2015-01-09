@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Cosmic Birthday</string>
+	<string name="pick_birthday">Pick your birthday</string>
+</resources>
