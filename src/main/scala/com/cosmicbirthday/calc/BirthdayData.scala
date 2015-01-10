@@ -64,10 +64,10 @@ class BirthdayData {
       makeStreamsInDays(planet.name + " years", planet.image, planet.yearInEarthDays))
 
   val periodStreams: List[Iterable[RelativeBirthday]] =
-    makeStreams("days", R.drawable.calendar, Period.days(1)) ++
+    makeStreams("Earth days", R.drawable.earth, Period.days(1)) ++
       makeStreams("weeks", R.drawable.calendar, Period.weeks(1)) ++
       makeStreams("months", R.drawable.calendar, Period.months(1)) ++
-      makeStreams("years", R.drawable.earth, Period.years(1)) ++
+      makeStreams("Earth years", R.drawable.earth, Period.years(1)) ++
       makeStreamsInDays("full moons", R.drawable.moon, 29.530588853) ++
       makeStreamsInDays("moon phases", R.drawable.moon, 29.530588853 / 4) ++
       makeStreams("Venus days", R.drawable.venus, Period.days(116) plus Period.hours(18)) ++

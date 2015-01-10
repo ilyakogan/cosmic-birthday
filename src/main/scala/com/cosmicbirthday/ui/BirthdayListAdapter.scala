@@ -11,7 +11,10 @@ class BirthdayListAdapter(val context: Context, val values: Array[AbsoluteBirthd
   extends ArrayAdapter[AbsoluteBirthday](context, R.layout.birthday_list_row, values) {
   override def getView(position: Int, convertView: View, parent: ViewGroup): View = {
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE).asInstanceOf[LayoutInflater]
-    val rowView = inflater.inflate(R.layout.birthday_list_row, parent, false)
+    val rowView =
+      if (convertView == null) inflater.inflate(R.layout.birthday_list_row, parent, false)
+      else convertView
+
     val birthday = values(position)
 
     val nameTextView = rowView.findViewById(R.id.name).asInstanceOf[TextView]
@@ -22,4 +25,5 @@ class BirthdayListAdapter(val context: Context, val values: Array[AbsoluteBirthd
     imageView.setImageResource(birthday.imageResource)
     rowView
   }
+
 }

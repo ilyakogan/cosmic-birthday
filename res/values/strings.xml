@@ -2,7 +2,7 @@
 <resources>
 	<string name="app_name">Cosmic Birthday</string>
 	<string name="date_of_birth_is">Your date of birth is</string>
-	<string name="upcoming_birthdays">Here are your upcoming birthdays:</string>
-	<string name="date_of_birth_picker_title">What is your date of birth?</string>
-	<string name="change">Change</string>
+	<string name="upcoming_birthdays">Your upcoming birthdays:</string>
+	<string name="date_of_birth_picker_title">When were you born?</string>
+	<string name="change">change</string>
 </resources>

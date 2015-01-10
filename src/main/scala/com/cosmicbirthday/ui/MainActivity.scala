@@ -2,6 +2,7 @@ package com.cosmicbirthday.ui
 
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Html
 import android.view.Gravity
@@ -15,7 +16,7 @@ import org.scaloid.common._
 class MainActivity extends SActivity {
   val context = this
   lazy val listView = new SListView()
-  lazy val dateTextView = new STextView().textSize(20.sp).gravity(Gravity.CENTER_HORIZONTAL)
+  lazy val dateTextView = new STextView()
 
   def today = new DateTime()
 
@@ -30,17 +31,19 @@ class MainActivity extends SActivity {
   }
 
   def updateUi(dateOfBirth: DateTime) = {
-    dateTextView.text = getString(R.string.date_of_birth_is) + " " + DateTimeFormat.longDate().print(dateOfBirth) + "."
+    dateTextView.text = DateTimeFormat.longDate().print(dateOfBirth)
     val nextBirthdays = new BirthdaysFinder().findUpcomingBirthdays(dateOfBirth, today)
     listView.setAdapter(new BirthdayListAdapter(context, nextBirthdays.toArray))
   }
 
   onCreate {
     contentView = new SVerticalLayout {
-      this += dateTextView
-      STextView(Html.fromHtml("<u>" + getString(R.string.change) + "</u>")).gravity(Gravity.CENTER_HORIZONTAL).textSize(18.sp).<<.marginTop(5).>>
+      STextView(R.string.date_of_birth_is).textSize(22.sp).<<.marginBottom(10).>>.gravity(Gravity.CENTER_HORIZONTAL).textColor(Color.WHITE)
+      this += dateTextView.textSize(35.sp).gravity(Gravity.CENTER_HORIZONTAL).backgroundResource(R.drawable.date_text_shape).textColor(Color.WHITE)
         .onClick(askForDate())
-      STextView(R.string.upcoming_birthdays).textSize(20.sp).<<.marginTop(15).marginBottom(10).>>.gravity(Gravity.CENTER_HORIZONTAL)
+      STextView(Html.fromHtml("<u>" + getString(R.string.change) + "</u>")).gravity(Gravity.CENTER_HORIZONTAL).textSize(18.sp).textColor(Color.CYAN)
+        .onClick(askForDate())
+      STextView(R.string.upcoming_birthdays).textSize(22.sp).<<.marginTop(25).marginBottom(10).>>.gravity(Gravity.CENTER_HORIZONTAL).textColor(Color.WHITE)
       this += listView
     }
   }
