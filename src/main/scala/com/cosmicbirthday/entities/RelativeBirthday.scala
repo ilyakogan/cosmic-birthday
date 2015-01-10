@@ -1,8 +1,17 @@
 package com.cosmicbirthday.entities
 
-import org.joda.time.{DateTime, Period}
+import org.joda.time.{Duration, DateTime, Period}
 
-class RelativeBirthday(val period: Period, val number: Int, val mnemonic: String) {
-  override def toString = number + " " + mnemonic
-  def makeAbsolute(dateOfBirth: DateTime) = new Birthday(dateOfBirth.plus(period), number, mnemonic)
+abstract class RelativeBirthday(description: BirthdayDescription) {
+  def makeAbsolute(dateOfBirth: DateTime): AbsoluteBirthday
+}
+
+class PeriodBasedRelativeBirthday(val period: Period, description: BirthdayDescription)
+  extends RelativeBirthday(description) {
+  override def makeAbsolute(dateOfBirth: DateTime) = new AbsoluteBirthday(dateOfBirth.plus(period), description)
+}
+
+class DurationBasedRelativeBirthday(val duration: Duration, description: BirthdayDescription)
+  extends RelativeBirthday(description) {
+  override def makeAbsolute(dateOfBirth: DateTime) = new AbsoluteBirthday(dateOfBirth.plus(duration), description)
 }

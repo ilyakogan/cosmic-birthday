@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Cosmic Birthday</string>
-	<string name="pick_birthday">Pick your birthday</string>
+	<string name="date_of_birth_is">Your date of birth is</string>
+	<string name="upcoming_birthdays">Here are your upcoming birthdays:</string>
+	<string name="date_of_birth_picker_title">What is your date of birth?</string>
+	<string name="change">Change</string>
 </resources>

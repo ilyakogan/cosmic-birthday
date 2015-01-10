@@ -1,3 +1,3 @@
 package com.cosmicbirthday.entities
 
-class BirthdayPair(val previousBirthday: Birthday, val nextBirthday: Birthday)
+class BirthdayPair(val previousBirthday: AbsoluteBirthday, val nextBirthday: AbsoluteBirthday)
