@@ -23,9 +23,7 @@ class PeopleActivity extends SActivity {
     }
   }
 
-
   onResume {
-    dataSource.open()
     reloadList
   }
 
@@ -33,9 +31,5 @@ class PeopleActivity extends SActivity {
     val people = dataSource.getAll
     val adapter = new ArrayAdapter[String](this, android.R.layout.simple_list_item_1, people.map(p => p.name + " " + p.dateOfBirth).toList.asJava)
     listView.setAdapter(adapter)
-  }
-
-  onPause {
-    dataSource.close()
   }
 }

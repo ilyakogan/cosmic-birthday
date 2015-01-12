@@ -6,7 +6,7 @@ import android.util.Log
 
 object DbProperties {
   val dbName = "people.db"
-  val dbVersion = 1
+  val dbVersion = 2
 }
 
 object PeopleTableColumns {

@@ -3,14 +3,14 @@ package com.cosmicbirthday.ui
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.graphics.Color
-import android.os.Bundle
 import android.text.Html
 import android.view.Gravity
 import android.widget.DatePicker
 import com.cosmicbirthday.R
 import com.cosmicbirthday.calc.BirthdaysFinder
+import com.cosmicbirthday.db.PeopleDataSource
+import com.cosmicbirthday.dbentities.{Me, Person}
 import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 import org.scaloid.common._
 
 class MainActivity extends SActivity {
@@ -20,70 +20,55 @@ class MainActivity extends SActivity {
 
   def today = new DateTime()
 
-  private var _dateOfBirth: Option[DateTime] = None
+  val peopleDataSource = new PeopleDataSource(this)
 
-  def getDateOfBirth = _dateOfBirth
-
-  def setDateOfBirth(year: Int, month: Int, dayOfMonth: Int): Unit = {
-    val newDate: DateTime = new DateTime(year, month, dayOfMonth, today.getHourOfDay, today.getMinuteOfHour)
-    _dateOfBirth = Some(newDate)
-    updateUi(newDate)
-  }
-
-  def updateUi(dateOfBirth: DateTime) = {
-    dateTextView.text = DateTimeFormat.longDate().print(dateOfBirth)
-    val nextBirthdays = new BirthdaysFinder().findUpcomingBirthdays(dateOfBirth, today)
+  def showBirthdays(people: Seq[Person]) = {
+    val nextBirthdays = new BirthdaysFinder().findUpcomingBirthdays(people, today)
     listView.setAdapter(new BirthdayListAdapter(context, nextBirthdays.toArray))
   }
 
   onCreate {
     contentView = new SVerticalLayout {
-      STextView(R.string.date_of_birth_is).textSize(22.sp).<<.marginBottom(10).>>.gravity(Gravity.CENTER_HORIZONTAL).textColor(Color.WHITE)
-      this += dateTextView.textSize(35.sp).gravity(Gravity.CENTER_HORIZONTAL).backgroundResource(R.drawable.date_text_shape).textColor(Color.WHITE)
-        .onClick(askForDate())
-      STextView(Html.fromHtml("<u>" + getString(R.string.change) + "</u>")).gravity(Gravity.CENTER_HORIZONTAL).textSize(18.sp).textColor(Color.CYAN)
-        .onClick(askForDate())
+      STextView(Html.fromHtml("<u>" + getString(R.string.add_friend) + "</u>")).gravity(Gravity.CENTER_HORIZONTAL).textSize(20.sp).textColor(Color.CYAN)
+        .onClick(askForFriendsDateOfBirth())
       STextView(R.string.upcoming_birthdays).textSize(22.sp).<<.marginTop(25).marginBottom(10).>>.gravity(Gravity.CENTER_HORIZONTAL).textColor(Color.WHITE)
       this += listView
     }
   }
 
   onResume {
-    getDateOfBirth match {
-      case None => askForDate()
-      case _ =>
-    }
+    val people = peopleDataSource.getAll
+    if (!people.exists(p => p.name == Me())) askForMyDateOfBirth()
+    else showBirthdays(people)
   }
 
-  def askForDate() {
+  def askForMyDateOfBirth() {
     val dialog = new DatePickerDialog(context, new OnDateSetListener {
       override def onDateSet(view: DatePicker, year: Int, monthZeroBased: Int, day: Int): Unit = {
-        setDateOfBirth(year, monthZeroBased + 1, day)
+        // Workaround because gets fired twice
+        if (!view.isShown) return
+
+        val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
+        peopleDataSource.insertPerson(new Person(Me(), date))
+        showBirthdays(peopleDataSource.getAll)
       }
-    },
-      getDateOfBirth match { case None => 1982; case Some(date) => date.getYear},
-      getDateOfBirth match { case None => 0; case Some(date) => date.getMonthOfYear - 1},
-      getDateOfBirth match { case None => 0; case Some(date) => date.getDayOfMonth})
-    dialog.setTitle(R.string.date_of_birth_picker_title)
+    }, 1982, 0, 0)
+    dialog.setTitle(R.string.when_were_you_born)
     dialog.show()
   }
 
-  override def onSaveInstanceState(outState: Bundle): Unit = {
-    super.onSaveInstanceState(outState)
-    getDateOfBirth match {
-      case Some(date) =>
-        outState.putInt("year", date.getYear)
-        outState.putInt("month", date.getMonthOfYear)
-        outState.putInt("dayOfMonth", date.getDayOfMonth)
-      case _ =>
-    }
-  }
+  def askForFriendsDateOfBirth(): Unit = {
+    val dialog = new DatePickerDialog(context, new OnDateSetListener {
+      override def onDateSet(view: DatePicker, year: Int, monthZeroBased: Int, day: Int): Unit = {
+        // Workaround because gets fired twice
+        if (!view.isShown) return
 
-  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
-    super.onRestoreInstanceState(savedInstanceState)
-    val year = savedInstanceState.getInt("year", 0)
-    if (year != 0) {
-      setDateOfBirth(year, savedInstanceState.getInt("month"), savedInstanceState.getInt("dayOfMonth"))
-    }
+        val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
+        peopleDataSource.insertPerson(new Person("Friend " + Math.random(), date))
+        showBirthdays(peopleDataSource.getAll)
+      }
+    }, 1982, 0, 0)
+    dialog.setTitle(R.string.add_friend)
+    dialog.show()
   }
 }

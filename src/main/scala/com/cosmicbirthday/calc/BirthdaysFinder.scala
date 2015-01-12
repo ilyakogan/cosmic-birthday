@@ -1,5 +1,6 @@
 package com.cosmicbirthday.calc
 
+import com.cosmicbirthday.dbentities.Person
 import com.cosmicbirthday.entities.AbsoluteBirthday
 import org.joda.time.DateTime
 
@@ -12,10 +13,11 @@ class BirthdaysFinder {
       .take(maxBirthdaysPerStream)
   }
 
-  def findUpcomingBirthdays(dateOfBirth: DateTime, today: DateTime): Iterable[AbsoluteBirthday] = {
+  def findUpcomingBirthdays(people: Seq[Person], today: DateTime): Iterable[AbsoluteBirthday] = {
     val relativeBirthdayStreams = new BirthdayData().periodStreams
-    val birthdayStreams = relativeBirthdayStreams.map(_.map(_.makeAbsolute(dateOfBirth)))
-    val nextBirthdays = birthdayStreams.map(stream => findBirthdaysInRange(stream, today, today.plusYears(5), 2))
-    nextBirthdays.flatten.sortBy(_.date.getMillis)
+
+    val birthdayStreams = people.flatMap(person => relativeBirthdayStreams.map(_.map(_.makeAbsolute(person))))
+    val nextBirthdays = birthdayStreams.flatMap(stream => findBirthdaysInRange(stream, today, today.plusYears(5), 2))
+    nextBirthdays.sortBy(_.date.getMillis)
   }
 }
