@@ -31,5 +31,4 @@ class BirthdayListAdapter(val context: Context, val values: Array[AbsoluteBirthd
     imageView.setImageResource(birthday.imageResource)
     rowView
   }
-
 }

@@ -18,7 +18,7 @@ class MainActivity extends SActivity {
   lazy val listView = new SListView()
   lazy val dateTextView = new STextView()
 
-  def today = new DateTime()
+  def today = new DateTime().withTimeAtStartOfDay()
 
   val peopleDataSource = new PeopleDataSource(this)
 
@@ -31,6 +31,8 @@ class MainActivity extends SActivity {
     contentView = new SVerticalLayout {
       STextView(Html.fromHtml("<u>" + getString(R.string.add_friend) + "</u>")).gravity(Gravity.CENTER_HORIZONTAL).textSize(20.sp).textColor(Color.CYAN)
         .onClick(askForFriendsDateOfBirth())
+      STextView(Html.fromHtml("<u>Edit friends</u>")).gravity(Gravity.CENTER_HORIZONTAL).textSize(20.sp).textColor(Color.CYAN)
+        .onClick(startActivity[PeopleActivity])
       STextView(R.string.upcoming_birthdays).textSize(22.sp).<<.marginTop(25).marginBottom(10).>>.gravity(Gravity.CENTER_HORIZONTAL).textColor(Color.WHITE)
       this += listView
     }

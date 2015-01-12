@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dip" >
+    <!-- ListRow Left side Thumbnail image -->
+    <LinearLayout
+            android:id="@+id/thumbnail_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip"
+            android:padding="3dip" >
+        <ImageView
+                android:id="@+id/thumbnail"
+                android:contentDescription="@string/app_name"
+                android:layout_width="60dip"
+                android:layout_height="60dip" />
+    </LinearLayout>
+    <LinearLayout
+            android:id="@+id/menu_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dip"
+            android:padding="3dip" >
+        <ImageView
+                android:id="@+id/edit"
+                android:contentDescription="@string/app_name"
+                android:layout_width="60dip"
+                android:layout_height="60dip" android:src="@android:drawable/ic_menu_edit"/>
+    </LinearLayout>
+    <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/image_layout"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="6dip"
+            android:layout_alignTop="@+id/image_layout"
+            android:paddingBottom ="6dip"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            android:textColor="@android:color/white" android:layout_toLeftOf="@+id/menu_layout"
+            android:layout_toStartOf="@+id/menu_layout"/>
+    <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name"
+            android:layout_alignLeft="@+id/name"
+            android:textSize="21sp"
+            android:textColor="@android:color/white" android:layout_toLeftOf="@+id/menu_layout"
+            android:layout_toStartOf="@+id/menu_layout"/>
+</RelativeLayout>  

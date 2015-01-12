@@ -1,11 +1,8 @@
 package com.cosmicbirthday.ui
-import android.widget.ArrayAdapter
 import com.cosmicbirthday.db.PeopleDataSource
 import com.cosmicbirthday.dbentities.Person
 import org.joda.time.DateTime
 import org.scaloid.common.{SActivity, SButton, SListView, SVerticalLayout}
-
-import scala.collection.JavaConverters._
 
 class PeopleActivity extends SActivity {
 
@@ -29,7 +26,7 @@ class PeopleActivity extends SActivity {
 
   def reloadList {
     val people = dataSource.getAll
-    val adapter = new ArrayAdapter[String](this, android.R.layout.simple_list_item_1, people.map(p => p.name + " " + p.dateOfBirth).toList.asJava)
+    val adapter = new PeopleListAdapter(this, people.toArray)
     listView.setAdapter(adapter)
   }
 }
