@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import com.cosmicbirthday.dbentities.Person
 import org.scaloid.common.RichCursor
 
-
 class PeopleDataSource(context: Context) {
 
   private implicit def cursor2RichCursor(c: Cursor): RichCursor = new RichCursor(c)
@@ -18,26 +17,45 @@ class PeopleDataSource(context: Context) {
     finally dbHelper.close()
   }
 
-  def insertPerson(person: Person) = {
+  def insertPerson(person: Person) =
     withDatabase { database =>
-      val values = new ContentValues()
-      values.put(PeopleTableColumns.id, person.id)
-      values.put(PeopleTableColumns.name, person.name)
-      values.put(PeopleTableColumns.dateOfBirthIso, person.dateOfBirthIso)
-      database.insert(PeopleTableColumns.tableName, null, values)
+      database.insert(PeopleTable.tableName, null, createValues(person))
     }
-  }
 
-  def deletePerson(person: Person) {
+  def deletePerson(person: Person) =
     withDatabase { database =>
-      database.delete(PeopleTableColumns.tableName, PeopleTableColumns.id + " = " + person.id, null)
+      database.delete(PeopleTable.tableName, getQueryById(person.id), null)
     }
-  }
+
+  def updatePerson(person: Person) =
+    withDatabase { database =>
+      database.update(PeopleTable.tableName, createValues(person), getQueryById(person.id), null)
+    }
 
   def getAll: List[Person] = {
+    select(null)
+  }
+
+  def getById(id: String) = {
+    select(getQueryById(id)).headOption
+  }
+
+  private def getQueryById(id: String): String = {
+    PeopleTable.Col.id + " = '" + id + "'"
+  }
+
+  private def select(query: String): List[Person] =
     withDatabase { database =>
-      database.query(PeopleTableColumns.tableName, PeopleTableColumns.allColumns, null, null, null, null, null).orm(
-        c => new Person(c.getString(0), c.getString(1), c.getString(2)))
+      database.query(PeopleTable.tableName, PeopleTable.allColumns, query, null, null, null, null).orm(
+        c => new Person(c.getString(0), c.getString(1), Option(c.getString(2)), c.getString(3)))
     }
+
+  private def createValues(person: Person): ContentValues = {
+    val values = new ContentValues()
+    values.put(PeopleTable.Col.id.toString, person.id)
+    values.put(PeopleTable.Col.name.toString, person.name)
+    person.avatarUrl.foreach(avatarUrl => values.put(PeopleTable.Col.avatarUrl.toString, avatarUrl))
+    values.put(PeopleTable.Col.dateOfBirthIso.toString, person.dateOfBirthIso)
+    values
   }
 }

@@ -1,3 +1,7 @@
+import com.cosmicbirthday.db.PeopleTable
+
+val v=PeopleTable.Col.values
+v.toArray.map(_.toString)
 
 var a = List[Int]()
 

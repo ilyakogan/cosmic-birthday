@@ -24,7 +24,7 @@ class BirthdayListAdapter(val context: Context, val values: Array[AbsoluteBirthd
 
     val nameIs: String = birthday.person.name match {
       case Me() => "You are "
-      case name => name + " is "
+      case name => '\u200E' + name + " is "
     }
     nameTextView.setText(nameIs + birthday.mnemonic + " old")
     dateTextView.setText("on " + DateTimeFormat.mediumDate().print(birthday.date))

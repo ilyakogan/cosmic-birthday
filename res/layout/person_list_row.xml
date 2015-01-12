@@ -6,30 +6,18 @@
                 android:padding="5dip" >
     <!-- ListRow Left side Thumbnail image -->
     <LinearLayout
-            android:id="@+id/thumbnail_layout"
+            android:id="@+id/image_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="5dip"
             android:padding="3dip" >
         <ImageView
-                android:id="@+id/thumbnail"
+                android:id="@+id/image"
+                android:background="@android:color/white"
                 android:contentDescription="@string/app_name"
                 android:layout_width="60dip"
                 android:layout_height="60dip" />
-    </LinearLayout>
-    <LinearLayout
-            android:id="@+id/menu_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="5dip"
-            android:padding="3dip" >
-        <ImageView
-                android:id="@+id/edit"
-                android:contentDescription="@string/app_name"
-                android:layout_width="60dip"
-                android:layout_height="60dip" android:src="@android:drawable/ic_menu_edit"/>
     </LinearLayout>
     <TextView
             android:id="@+id/name"
@@ -43,8 +31,8 @@
             android:textSize="21sp"
             android:textStyle="bold"
             android:typeface="sans"
-            android:textColor="@android:color/white" android:layout_toLeftOf="@+id/menu_layout"
-            android:layout_toStartOf="@+id/menu_layout"/>
+            android:textColor="@android:color/white"
+            android:layout_alignParentRight="true"/>
     <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
@@ -52,6 +40,6 @@
             android:layout_below="@+id/name"
             android:layout_alignLeft="@+id/name"
             android:textSize="21sp"
-            android:textColor="@android:color/white" android:layout_toLeftOf="@+id/menu_layout"
-            android:layout_toStartOf="@+id/menu_layout"/>
+            android:textColor="@android:color/white"
+            android:layout_alignParentRight="true"/>
 </RelativeLayout>  
