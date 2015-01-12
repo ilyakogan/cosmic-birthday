@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Cosmic Birthday</string>
-	<string name="date_of_birth_is">Your date of birth is</string>
-	<string name="upcoming_birthdays">Your upcoming birthdays:</string>
-	<string name="when_were_you_born">When were you born?</string>
-	<string name="add_friend">Add a friend</string>
-
+    <string name="app_name">Cosmic Birthday</string>
+    <string name="date_of_birth_is">Your date of birth is</string>
+    <string name="upcoming_birthdays">Upcoming birthdays:</string>
+    <string name="when_were_you_born">When were you born?</string>
+    <string name="add_friend">Add a friend</string>
+    <string name="friend_name">Friend\'s name:</string>
+    <string name="no_name">No name entered.</string>
 </resources>

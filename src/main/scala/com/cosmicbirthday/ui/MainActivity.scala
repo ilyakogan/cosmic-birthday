@@ -44,31 +44,39 @@ class MainActivity extends SActivity {
 
   def askForMyDateOfBirth() {
     val dialog = new DatePickerDialog(context, new OnDateSetListener {
-      override def onDateSet(view: DatePicker, year: Int, monthZeroBased: Int, day: Int): Unit = {
-        // Workaround because gets fired twice
-        if (!view.isShown) return
-
-        val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
-        peopleDataSource.insertPerson(new Person(Me(), date))
-        showBirthdays(peopleDataSource.getAll)
-      }
+      override def onDateSet(view: DatePicker, year: Int, monthZeroBased: Int, day: Int): Unit =
+      // Workaround because gets fired twice
+        if (view.isShown)
+          addFriend(Me(), year, monthZeroBased, day)
     }, 1982, 0, 0)
     dialog.setTitle(R.string.when_were_you_born)
     dialog.show()
   }
 
-  def askForFriendsDateOfBirth(): Unit = {
-    val dialog = new DatePickerDialog(context, new OnDateSetListener {
-      override def onDateSet(view: DatePicker, year: Int, monthZeroBased: Int, day: Int): Unit = {
-        // Workaround because gets fired twice
-        if (!view.isShown) return
+  def addFriend(name: String, year: Int, monthZeroBased: Int, day: Int) = {
+    if (!name.isEmpty) {
+      val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
+      peopleDataSource.insertPerson(new Person(name, date))
+      showBirthdays(peopleDataSource.getAll)
+    }
+    else toast(R.string.no_name)
+  }
 
-        val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
-        peopleDataSource.insertPerson(new Person("Friend " + Math.random(), date))
-        showBirthdays(peopleDataSource.getAll)
-      }
-    }, 1982, 0, 0)
-    dialog.setTitle(R.string.add_friend)
-    dialog.show()
+  def askForFriendsDateOfBirth(): Unit = {
+    lazy val friendName = new SEditText()
+    lazy val datePicker = new SDatePicker()
+    new AlertDialogBuilder()
+      .setView(
+        new SVerticalLayout {
+          STextView(R.string.friend_name).textSize(22.sp).gravity(Gravity.CENTER_HORIZONTAL)
+          this += friendName
+          this += datePicker
+          datePicker.setCalendarViewShown(false)
+        }
+      )
+      .setTitle(R.string.add_friend)
+      .setPositiveButton(android.R.string.ok, addFriend(friendName.text.toString.trim, datePicker.getYear, datePicker.getMonth, datePicker.getDayOfMonth))
+      .setNegativeButton(android.R.string.cancel, null)
+      .show()
   }
 }
