@@ -32,7 +32,7 @@ class BirthdayData {
 
   private val detailedSequence = List((1 to 1000 by 1).toStream.map(x => new Multiple(x)))
 
-  private def makeStreamsInDays(mnemonic: String, image: Int, days: Double): List[Iterable[RelativeBirthday]] =
+  private def makeStreamsInDays(mnemonic: String, image: Int, days: Double): List[Stream[RelativeBirthday]] =
     for (sequence <- notableMultipleSequences)
     yield
       sequence.map(multiple =>
@@ -41,7 +41,7 @@ class BirthdayData {
           new BirthdayDescription(multiple.alias + " " + mnemonic, image)))
         .takeWhile(x => x.duration.getStandardDays < 200 * 365)
 
-  private def makeStreams(mnemonic: String, image: Int, period: Period, isExtraDetailed: Boolean = false): List[Iterable[RelativeBirthday]] =
+  private def makeStreams(mnemonic: String, image: Int, period: Period, isExtraDetailed: Boolean = false): List[Stream[RelativeBirthday]] =
     for (sequence <- if (isExtraDetailed) detailedSequence else notableMultipleSequences)
     yield
       sequence.map(multiple =>
@@ -61,11 +61,11 @@ class BirthdayData {
     new Planet("Uranus", 84.07 * yearInDays, R.drawable.uranus),
     new Planet("Neptune", 164.81 * yearInDays, R.drawable.neptune))
 
-  private val planetYearStreams: List[Iterable[RelativeBirthday]] =
+  private val planetYearStreams: List[Stream[RelativeBirthday]] =
     planets.flatMap(planet =>
       makeStreamsInDays(planet.name + " years", planet.image, planet.yearInEarthDays))
 
-  val periodStreams: List[Iterable[RelativeBirthday]] =
+  val periodStreams: List[Stream[RelativeBirthday]] =
     makeStreams("Earth days", R.drawable.earth, Period.days(1)) ++
       makeStreams("weeks", R.drawable.calendar, Period.weeks(1)) ++
       makeStreams("months", R.drawable.calendar, Period.months(1)) ++
