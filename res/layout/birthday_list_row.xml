@@ -3,12 +3,12 @@
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
-              android:padding="2dip">
+              android:padding="2dip"
+              android:background="@android:color/black">
     <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@android:color/black">
+            android:orientation="horizontal">
         <LinearLayout
                 android:id="@+id/image_layout"
                 android:layout_width="wrap_content"
