@@ -11,8 +11,8 @@ class BirthdayData {
 
   private val notableDecimalMultipleSequences =
     List(
-      1 to 119 by 1,
-      120 to 190 by 10,
+      1 to 19 by 1,
+      20 to 190 by 10,
       200 to 1900 by 100,
       2000 to 19000 by 1000,
       20000 to 190000 by 10000,
@@ -30,6 +30,8 @@ class BirthdayData {
   private val notableMultipleSequences =
     notableBinaryMultiples +: notableDecimalMultipleSequences
 
+  private val detailedSequence = List((1 to 1000 by 1).toStream.map(x => new Multiple(x)))
+
   private def makeStreamsInDays(mnemonic: String, image: Int, days: Double): List[Iterable[RelativeBirthday]] =
     for (sequence <- notableMultipleSequences)
     yield
@@ -39,8 +41,8 @@ class BirthdayData {
           new BirthdayDescription(multiple.alias + " " + mnemonic, image)))
         .takeWhile(x => x.duration.getStandardDays < 200 * 365)
 
-  private def makeStreams(mnemonic: String, image: Int, period: Period): List[Iterable[RelativeBirthday]] =
-    for (sequence <- notableMultipleSequences)
+  private def makeStreams(mnemonic: String, image: Int, period: Period, isExtraDetailed: Boolean = false): List[Iterable[RelativeBirthday]] =
+    for (sequence <- if (isExtraDetailed) detailedSequence else notableMultipleSequences)
     yield
       sequence.map(multiple =>
         new PeriodBasedRelativeBirthday(
@@ -67,7 +69,7 @@ class BirthdayData {
     makeStreams("Earth days", R.drawable.earth, Period.days(1)) ++
       makeStreams("weeks", R.drawable.calendar, Period.weeks(1)) ++
       makeStreams("months", R.drawable.calendar, Period.months(1)) ++
-      makeStreams("Earth years", R.drawable.earth, Period.years(1)) ++
+      makeStreams("Earth years", R.drawable.earth, Period.years(1), isExtraDetailed = true) ++
       makeStreamsInDays("full moons", R.drawable.moon, 29.530588853) ++
       makeStreamsInDays("moon phases", R.drawable.moon, 29.530588853 / 4) ++
       makeStreams("Venus days", R.drawable.venus, Period.days(116) plus Period.hours(18)) ++
