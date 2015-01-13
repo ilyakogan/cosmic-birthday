@@ -67,7 +67,7 @@ class PersonAdder(activity: AddOrEditPersonDialogTrait, onPersonAdded: (() => Un
     activity.showAddOrEditMyselfDialog(None, addPerson)
 
   private def addPerson(name: String, year: Int, monthZeroBased: Int, day: Int) = {
-    if (!name.isEmpty && name != Me()) {
+    if (!name.isEmpty) { // todo: handle this && name != Me()) {
       val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
       new PeopleDataSource(activity).insertPerson(new Person(name, None, date))
       onPersonAdded()
@@ -84,7 +84,7 @@ class PersonEditor(activity: AddOrEditPersonDialogTrait, person: Person, onPerso
       activity.showAddOrEditFriendDialog(Some(person), editPerson)
 
   private def editPerson(name: String, year: Int, monthZeroBased: Int, day: Int) = {
-    if (!name.isEmpty && name != Me()) {
+    if (!name.isEmpty) { // todo: handle this && name != Me()) {
       val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
       val newPerson = new Person(person.id, name, person.avatarUrl, date)
       new PeopleDataSource(activity).updatePerson(newPerson)
