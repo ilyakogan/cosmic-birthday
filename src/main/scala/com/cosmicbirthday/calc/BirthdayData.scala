@@ -70,7 +70,7 @@ class BirthdayData {
       makeStreams("weeks", R.drawable.calendar, Period.weeks(1)) ++
       makeStreams("months", R.drawable.calendar, Period.months(1)) ++
       makeStreams("Earth years", R.drawable.earth, Period.years(1), isExtraDetailed = true) ++
-      makeStreamsInDays("full moons", R.drawable.moon, 29.530588853) ++
+      makeStreamsInDays("lunar months", R.drawable.moon, 29.530588853) ++
       makeStreamsInDays("moon phases", R.drawable.moon, 29.530588853 / 4) ++
       makeStreams("Venus days", R.drawable.venus, Period.days(116) plus Period.hours(18)) ++
       makeStreams("Mercury days", R.drawable.mercury, Period.days(58) plus Period.hours(15) plus Period.minutes(30)) ++

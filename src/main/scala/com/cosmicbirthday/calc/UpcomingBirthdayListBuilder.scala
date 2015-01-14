@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 class Section(val title: String, val maxDate: DateTime)
 
 class UpcomingBirthdayListBuilder {
-  private val maxBirthdaysPerStream = 2
+  private val maxBirthdaysPerStream = 1
 
   def getBirthdayListItems(people: Seq[Person], today: DateTime): List[BirthdayListItem] = {
     val sections = makeSections(today)
@@ -23,14 +23,19 @@ class UpcomingBirthdayListBuilder {
   }
 
   private def makeSections(today: DateTime): List[Section] = {
+    val endOfThisMonth = today.withDayOfMonth(1).plusMonths(1)
+    val endOfNextMonth = endOfThisMonth.plusMonths(1)
+
     val endsOfMonths = Range(1, 36).map(x => today.plusWeeks(1).withDayOfMonth(1).plusMonths(x))
-    val monthSections = endsOfMonths.map(endOfMonth =>
-      new Section(
-        if (endOfMonth.getYear == today.getYear)
-          endOfMonth.toString("MMMM").toUpperCase
-        else
-          endOfMonth.toString("MMMM yyyy").toUpperCase,
-        endOfMonth))
+    val monthSections = endsOfMonths.map(endOfMonth => {
+      val lastDayOfMonth = endOfMonth.minusDays(1)
+      val title =
+        if (endOfMonth == endOfThisMonth) "THIS MONTH"
+        else if (endOfMonth == endOfNextMonth) "NEXT MONTH"
+        else if (lastDayOfMonth.getYear == today.getYear) lastDayOfMonth.toString("MMMM").toUpperCase
+        else lastDayOfMonth.toString("MMMM yyyy").toUpperCase
+      new Section(title, endOfMonth)
+    })
 
     List(
       new Section("TODAY", today.plusDays(1)),

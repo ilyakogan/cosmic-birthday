@@ -27,8 +27,8 @@
             android:layout_marginLeft="10dip"
             android:layout_marginTop="6dip"
             android:layout_alignTop="@+id/image_layout"
-            android:paddingBottom ="6dip"
-            android:textSize="21sp"
+            android:paddingBottom ="3dip"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"
             android:typeface="sans"
             android:textColor="@android:color/white"
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_alignLeft="@+id/name"
-            android:textSize="21sp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"
             android:layout_alignParentRight="true"/>
 </RelativeLayout>  
