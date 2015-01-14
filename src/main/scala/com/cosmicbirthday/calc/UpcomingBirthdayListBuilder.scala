@@ -1,7 +1,7 @@
 package com.cosmicbirthday.calc
 
 import com.cosmicbirthday.dbentities.Person
-import com.cosmicbirthday.entities.{BirthdayListItem, AbsoluteBirthday, BirthdayItem, SectionItem}
+import com.cosmicbirthday.entities.{AbsoluteBirthday, BirthdayItem, BirthdayListItem, SectionItem}
 import org.joda.time.DateTime
 
 class Section(val title: String, val maxDate: DateTime)
@@ -23,11 +23,19 @@ class UpcomingBirthdayListBuilder {
   }
 
   private def makeSections(today: DateTime): List[Section] = {
-    List(new Section("TODAY", today.plusDays(1)),
-      new Section("THIS WEEK", today.plusWeeks(1)),
-      new Section("THIS MONTH", today.plusMonths(1)),
-      new Section("THIS YEAR", today.plusYears(1)),
-      new Section("NEXT FEW YEARS", today.plusYears(5)))
+    val endsOfMonths = Range(1, 36).map(x => today.plusWeeks(1).withDayOfMonth(1).plusMonths(x))
+    val monthSections = endsOfMonths.map(endOfMonth =>
+      new Section(
+        if (endOfMonth.getYear == today.getYear)
+          endOfMonth.toString("MMMM").toUpperCase
+        else
+          endOfMonth.toString("MMMM yyyy").toUpperCase,
+        endOfMonth))
+
+    List(
+      new Section("TODAY", today.plusDays(1)),
+      new Section("THIS WEEK", today.plusWeeks(1))) ++
+      monthSections
   }
 
   private def groupBirthdaysIntoSections(sections: List[Section], nextBirthdays: Seq[AbsoluteBirthday]): List[(Section, Seq[AbsoluteBirthday])] = {
