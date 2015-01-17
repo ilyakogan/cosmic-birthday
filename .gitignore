@@ -3,9 +3,11 @@
 *.iws
 target
 gen
+build
 .DS_Store
 .cache
 .classpath
 .project
 .idea
+.gradle
 proguard_logs
