@@ -6,7 +6,7 @@
     <artifactId>cosmicbirthday</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>apk</packaging>
-    <name>Glückentext</name>
+    <name>Cosmic birthday</name>
 
     <properties>
         <scala.version>2.11.1</scala.version>
