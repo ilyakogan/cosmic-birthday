@@ -11,6 +11,10 @@
     <string name="no_name">No name entered.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="share">Share</string>
+    <string name="format_friend_age">\u200E%1$s is %2$s old</string>
+    <string name="format_your_age">You are %1$s old</string>
+    <string name="format_on_date">on %s</string>
     <item type="id" name="TAG_VIEW_HOLDER"/>
     <item type="id" name="TAG_PERSON_ID"/>
 </resources>

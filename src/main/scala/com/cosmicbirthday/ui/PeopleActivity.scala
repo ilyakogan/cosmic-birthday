@@ -43,7 +43,7 @@ class PeopleActivity extends SActivity with AddOrEditPersonDialogTrait {
   }
 
   def showPersonPopupMenu(menuAnchor: View, person: Person) {
-    val popupMenu: PopupMenu = new PopupMenu(this, menuAnchor)
+    val popupMenu = new PopupMenu(this, menuAnchor)
     val menu = popupMenu.getMenu
     menu.clear()
     menu.add(R.string.edit).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener {

@@ -13,7 +13,12 @@ class BirthdayListAdapter(val context: Context, val values: Array[BirthdayListIt
   override def getView(position: Int, convertView: View, parent: ViewGroup): View = {
     val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE).asInstanceOf[LayoutInflater]
 
-    values(position) match {
+    val item = values(position)
+    createViewForItem(parent, inflater, item)
+  }
+
+  def createViewForItem(parent: ViewGroup, inflater: LayoutInflater, item: BirthdayListItem): View = {
+    item match {
       case BirthdayItem(birthday) =>
         val rowView = inflater.inflate(R.layout.birthday_list_row, parent, false)
 
@@ -21,12 +26,13 @@ class BirthdayListAdapter(val context: Context, val values: Array[BirthdayListIt
         val dateTextView = rowView.findViewById(R.id.date).asInstanceOf[TextView]
         val imageView = rowView.findViewById(R.id.image).asInstanceOf[ImageView]
 
-        val nameIs: String = birthday.person.name match {
-          case Me() => "You are "
-          case name => '\u200E' + name + " is "
+        val ageText: String = birthday.person.name match {
+          case Me() => context.getString(R.string.format_your_age, birthday.mnemonic)
+          case name => context.getString(R.string.format_friend_age, name, birthday.mnemonic)
         }
-        nameTextView.setText(nameIs + birthday.mnemonic + " old")
-        dateTextView.setText("on " + DateTimeFormat.mediumDate().print(birthday.date))
+        nameTextView.setText(ageText)
+        dateTextView.setText(context.getString(R.string.format_on_date).
+          format(DateTimeFormat.mediumDate().print(birthday.date)))
         imageView.setImageResource(birthday.imageResource)
         rowView
 
