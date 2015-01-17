@@ -55,21 +55,6 @@ class MainActivity extends SActivity with AddOrEditPersonDialogTrait {
       }
     })
     menu.show()
-//    val shareItem = menu.add(R.string.share)
-//    val shareActionProvider = new ShareActionProvider(context)
-//    shareItem.setActionProvider(shareActionProvider)
-//    shareItem.setOnMenuItemClickListener(new OnMenuItemClickListener {
-//      override def onMenuItemClick(item: MenuItem): Boolean = {
-//        val intent = new Intent(android.content.Intent.ACTION_SEND)
-//        intent.setType("text/plain")
-//        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.format_friend_age, birthday.person.name, birthday.mnemonic))
-//        intent.putExtra(Intent.EXTRA_TEXT, DateTimeFormat.mediumDate().print(birthday.date))
-//
-//        shareActionProvider.setShareIntent(intent)
-//        true
-//      }
-//    })
-//    popupMenu.show()
   }
 
   onCreate {
