@@ -8,6 +8,7 @@ import com.cosmicbirthday.calc.UpcomingBirthdayListBuilder
 import com.cosmicbirthday.db.PeopleDataSource
 import com.cosmicbirthday.dbentities.Person
 import com.cosmicbirthday.entities.{AbsoluteBirthday, BirthdayItem, BirthdayListItem, SectionItem}
+import com.facebook.AppEventsLogger
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.scaloid.common._
@@ -81,5 +82,11 @@ class MainActivity extends SActivity with AddOrEditPersonDialogTrait {
     val people = peopleDataSource.getAll
     if (!people.exists(p => p.isMe)) personAdder.offerToAddYourself()
     else showBirthdays(people)
+
+    AppEventsLogger.activateApp(this)
+  }
+
+  onPause {
+    AppEventsLogger.deactivateApp(this)
   }
 }

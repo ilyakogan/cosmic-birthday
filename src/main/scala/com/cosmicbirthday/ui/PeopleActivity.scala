@@ -5,6 +5,7 @@ import android.widget.{AdapterView, PopupMenu}
 import com.cosmicbirthday.R
 import com.cosmicbirthday.db.PeopleDataSource
 import com.cosmicbirthday.dbentities.Person
+import com.facebook.AppEventsLogger
 import org.scaloid.common.{SActivity, SButton, SListView, SVerticalLayout}
 
 class PeopleActivity extends SActivity with AddOrEditPersonDialogTrait {
@@ -25,6 +26,12 @@ class PeopleActivity extends SActivity with AddOrEditPersonDialogTrait {
 
   onResume {
     reloadList()
+
+    AppEventsLogger.activateApp(this)
+  }
+
+  onPause {
+    AppEventsLogger.deactivateApp(this)
   }
 
   def reloadList() {
