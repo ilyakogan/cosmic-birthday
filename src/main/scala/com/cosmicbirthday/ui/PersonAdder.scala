@@ -33,7 +33,7 @@ trait AddOrEditPersonDialogTrait extends SActivity {
 
     new AlertDialogBuilder()
       .setView(view)
-      .setTitle(if (person.isDefined) R.string.edit_person else R.string.add_friend)
+      .setTitle(if (person.isDefined) R.string.edit_person else R.string.add_person)
       .setPositiveButton(android.R.string.ok, callback(nameInput.text.toString.trim, datePicker.getYear, datePicker.getMonth, datePicker.getDayOfMonth))
       .setNegativeButton(android.R.string.cancel, null)
       .show()

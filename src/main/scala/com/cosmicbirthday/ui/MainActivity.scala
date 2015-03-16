@@ -6,8 +6,9 @@ import android.widget._
 import com.cosmicbirthday.R
 import com.cosmicbirthday.calc.UpcomingBirthdayListBuilder
 import com.cosmicbirthday.db.PeopleDataSource
-import com.cosmicbirthday.dbentities.Person
+import com.cosmicbirthday.dbentities.{Me, Person}
 import com.cosmicbirthday.entities.{AbsoluteBirthday, BirthdayItem, BirthdayListItem, SectionItem}
+import com.facebook.AppEventsLogger
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.scaloid.common._
@@ -21,8 +22,10 @@ class MainActivity extends SActivity with AddOrEditPersonDialogTrait {
 
   val peopleDataSource = new PeopleDataSource(this)
 
-  val personAdder = new PersonAdder(this, () => showBirthdays(peopleDataSource.getAll))
-
+  val personAdder = new PersonAdder(this, () => {
+    showBirthdays(peopleDataSource.getAll)
+    showOrHideAddMyBirthdayAction()
+  })
 
   def showBirthdays(people: Seq[Person]) = {
     val items = new UpcomingBirthdayListBuilder().getBirthdayListItems(people, today)
@@ -54,32 +57,28 @@ class MainActivity extends SActivity with AddOrEditPersonDialogTrait {
       }
     })
     menu.show()
-//    val shareItem = menu.add(R.string.share)
-//    val shareActionProvider = new ShareActionProvider(context)
-//    shareItem.setActionProvider(shareActionProvider)
-//    shareItem.setOnMenuItemClickListener(new OnMenuItemClickListener {
-//      override def onMenuItemClick(item: MenuItem): Boolean = {
-//        val intent = new Intent(android.content.Intent.ACTION_SEND)
-//        intent.setType("text/plain")
-//        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.format_friend_age, birthday.person.name, birthday.mnemonic))
-//        intent.putExtra(Intent.EXTRA_TEXT, DateTimeFormat.mediumDate().print(birthday.date))
-//
-//        shareActionProvider.setShareIntent(intent)
-//        true
-//      }
-//    })
-//    popupMenu.show()
   }
 
   onCreate {
     setContentView(R.layout.birthdays)
-    find[Button](R.id.add_friend).onClick(personAdder.offerToAddFriend())
     find[Button](R.id.edit_friends).onClick(startActivity[PeopleActivity])
+    find[Button](R.id.add_my_birthday).onClick(personAdder.offerToAddYourself())
   }
 
   onResume {
     val people = peopleDataSource.getAll
     if (!people.exists(p => p.isMe)) personAdder.offerToAddYourself()
     else showBirthdays(people)
+    showOrHideAddMyBirthdayAction()
+
+    AppEventsLogger.activateApp(this)
   }
+
+  onPause {
+    AppEventsLogger.deactivateApp(this)
+  }
+
+  def showOrHideAddMyBirthdayAction() =
+    find[Button](R.id.add_my_birthday).setVisibility(
+      if (peopleDataSource.containsName(Me())) View.GONE else View.VISIBLE)
 }

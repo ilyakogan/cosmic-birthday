@@ -32,17 +32,17 @@ class PeopleDataSource(context: Context) {
       database.update(PeopleTable.tableName, createValues(person), getQueryById(person.id), null)
     }
 
-  def getAll: List[Person] = {
+  def getAll: List[Person] =
     select(null)
-  }
 
-  def getById(id: String) = {
+  def getById(id: String) =
     select(getQueryById(id)).headOption
-  }
 
-  private def getQueryById(id: String): String = {
+  def containsName(name: String) =
+    select(PeopleTable.Col.name + " = '" + name + "'").nonEmpty
+
+  private def getQueryById(id: String) =
     PeopleTable.Col.id + " = '" + id + "'"
-  }
 
   private def select(query: String): List[Person] =
     withDatabase { database =>
