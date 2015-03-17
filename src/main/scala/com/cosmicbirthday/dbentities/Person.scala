@@ -15,11 +15,9 @@ class Person(val id: String, val name: String, val avatarUrl: Option[String], va
 
   def dateOfBirth = ISODateTimeFormat.dateTime().parseDateTime(dateOfBirthIso)
 
-  def isMe = name == Me()
+  def isMe = name == Person.Me
 }
 
-object Me {
-  def apply(ignored: Unit) = "me"
-
-  def unapply(str: String) = str == "me"
+object Person {
+  def Me = "me"
 }

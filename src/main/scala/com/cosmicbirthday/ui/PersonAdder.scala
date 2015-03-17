@@ -2,18 +2,22 @@ package com.cosmicbirthday.ui
 
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.{Activity, DatePickerDialog}
-import android.content.Context
-import android.view.Gravity
+import android.content.{Context, DialogInterface}
 import android.view.inputmethod.InputMethodManager
+import android.view.{Gravity, View}
 import android.widget.DatePicker
 import com.cosmicbirthday.R
 import com.cosmicbirthday.db.PeopleDataSource
-import com.cosmicbirthday.dbentities.{Person, Me}
+import com.cosmicbirthday.dbentities.Person
 import org.joda.time.DateTime
 import org.scaloid.common._
 
+import scala.util.{Failure, Success, Try}
+
 trait AddOrEditPersonDialogTrait extends SActivity {
   this: Activity =>
+
+  val thisActivity = this
 
   val defaultInitialDate = new DateTime(1982, 1, 1, 0, 0)
 
@@ -31,12 +35,29 @@ trait AddOrEditPersonDialogTrait extends SActivity {
       datePicker.updateDate(initialDate.getYear, initialDate.getMonthOfYear - 1, initialDate.getDayOfMonth)
     }
 
-    new AlertDialogBuilder()
+    def onOkClicked() = callback(nameInput.text.toString.trim, datePicker.getYear, datePicker.getMonth, datePicker.getDayOfMonth)
+
+    val dialog = new AlertDialogBuilder()
       .setView(view)
       .setTitle(if (person.isDefined) R.string.edit_person else R.string.add_person)
-      .setPositiveButton(android.R.string.ok, callback(nameInput.text.toString.trim, datePicker.getYear, datePicker.getMonth, datePicker.getDayOfMonth))
+      .setPositiveButton(android.R.string.ok, null)
       .setNegativeButton(android.R.string.cancel, null)
-      .show()
+      .create()
+
+    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+      override def onShow(dialogInterface: DialogInterface) = {
+        val button = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        button.setOnClickListener(new View.OnClickListener() {
+          override def onClick(view: View) =
+            Try(onOkClicked()) match {
+              case Success(_) => dialog.dismiss()
+              case Failure(ex) => toast(ex.getMessage)(thisActivity)
+            }
+        })
+      }
+    })
+
+    dialog.show()
 
     if (!person.isDefined) {
       nameInput.requestFocus()
@@ -52,7 +73,7 @@ trait AddOrEditPersonDialogTrait extends SActivity {
       override def onDateSet(view: DatePicker, year: Int, monthZeroBased: Int, day: Int): Unit =
       // Workaround because gets fired twice
         if (view.isShown)
-          callback(Me(), year, monthZeroBased, day)
+          Try(callback(Person.Me, year, monthZeroBased, day))
     }, initialDate.getYear, initialDate.getMonthOfYear - 1, initialDate.getDayOfMonth)
     dialog.setTitle(R.string.when_were_you_born)
     dialog.show()
@@ -67,12 +88,14 @@ class PersonAdder(activity: AddOrEditPersonDialogTrait, onPersonAdded: (() => Un
     activity.showAddOrEditMyselfDialog(None, addPerson)
 
   private def addPerson(name: String, year: Int, monthZeroBased: Int, day: Int) = {
-    if (!name.isEmpty) { // todo: handle this && name != Me()) {
-      val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
-      new PeopleDataSource(activity).insertPerson(new Person(name, None, date))
-      onPersonAdded()
-    }
-    else toast(activity.getString(R.string.no_name))(activity)
+    require(name.nonEmpty, activity.getString(R.string.no_name))
+    require(name != Person.Me, activity.getString(R.string.name_already_exists))
+    val peopleDataSource = new PeopleDataSource(activity)
+    require(!peopleDataSource.containsName(name), activity.getString(R.string.name_already_exists))
+
+    val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
+    peopleDataSource.insertPerson(new Person(name, None, date))
+    onPersonAdded()
   }
 }
 
@@ -84,13 +107,21 @@ class PersonEditor(activity: AddOrEditPersonDialogTrait, person: Person, onPerso
       activity.showAddOrEditFriendDialog(Some(person), editPerson)
 
   private def editPerson(name: String, year: Int, monthZeroBased: Int, day: Int) = {
-    if (!name.isEmpty) { // todo: handle this && name != Me()) {
-      val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
-      val newPerson = new Person(person.id, name, person.avatarUrl, date)
-      new PeopleDataSource(activity).updatePerson(newPerson)
-      onPersonEdited()
+    require(name.nonEmpty, activity.getString(R.string.no_name))
+    val peopleDataSource = new PeopleDataSource(activity)
+    if (name != person.name) {
+      require(name != Person.Me, activity.getString(R.string.name_already_exists))
+      require(!peopleDataSource.containsName(name), activity.getString(R.string.name_already_exists))
     }
-    else toast(activity.getString(R.string.no_name))(activity)
+
+    val date = new DateTime(year, monthZeroBased + 1, day, 0, 0)
+    val newPerson = new Person(person.id, name, person.avatarUrl, date)
+    peopleDataSource.updatePerson(newPerson)
+    onPersonEdited()
   }
 
+  final def require(requirement: Boolean, message: String) {
+    if (!requirement)
+      throw new IllegalArgumentException(message)
+  }
 }

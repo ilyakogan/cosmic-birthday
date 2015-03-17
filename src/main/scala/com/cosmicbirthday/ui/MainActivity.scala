@@ -6,7 +6,7 @@ import android.widget._
 import com.cosmicbirthday.R
 import com.cosmicbirthday.calc.UpcomingBirthdayListBuilder
 import com.cosmicbirthday.db.PeopleDataSource
-import com.cosmicbirthday.dbentities.{Me, Person}
+import com.cosmicbirthday.dbentities.{Person}
 import com.cosmicbirthday.entities.{AbsoluteBirthday, BirthdayItem, BirthdayListItem, SectionItem}
 import com.facebook.AppEventsLogger
 import org.joda.time.DateTime
@@ -80,5 +80,5 @@ class MainActivity extends SActivity with AddOrEditPersonDialogTrait {
 
   def showOrHideAddMyBirthdayAction() =
     find[Button](R.id.add_my_birthday).setVisibility(
-      if (peopleDataSource.containsName(Me())) View.GONE else View.VISIBLE)
+      if (peopleDataSource.containsName(Person.Me)) View.GONE else View.VISIBLE)
 }

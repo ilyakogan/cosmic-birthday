@@ -6,12 +6,13 @@
     <string name="upcoming_birthdays">Upcoming birthdays:</string>
     <string name="when_were_you_born">When were you born?</string>
     <string name="add_my_birthday">Add your birthday</string>
-    <string name="edit_friends">Family and friends</string>
+    <string name="edit_friends">Edit family and friends</string>
     <string name="add_friend">Add someone</string>
     <string name="add_person">Add a person</string>
     <string name="edit_person">Edit a person</string>
     <string name="friend_name">Person\'s name:</string>
     <string name="no_name">No name entered.</string>
+    <string name="name_already_exists">Person\'s name already exists.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
