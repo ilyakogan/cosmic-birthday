@@ -1,49 +1,19 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            url "http://saturday06.github.io/gradle-android-scala-plugin/repository/snapshot"
-        }
+        jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:0.13.0"
-        classpath "jp.leafytree.gradle:gradle-android-scala-plugin:1.0-SNAPSHOT"
+        classpath 'com.android.tools.build:gradle:1.1.0'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
-apply plugin: "com.android.application"
-apply plugin: "android-scala"
-
-android {
-    compileSdkVersion "android-21"
-    buildToolsVersion "21.1.1"
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 1000005
-        versionName "1.0.5"
+allprojects {
+    repositories {
+        jcenter()
     }
-
-    buildTypes {
-        debug {
-            runProguard true
-            proguardFile file("proguard.cfg")
-        }
-
-        release {
-            runProguard true
-            proguardFile file("proguard.cfg")
-        }
-    }
-}
-
-dependencies {
-    compile 'org.scala-lang:scala-library:2.11.2'
-    compile 'org.scaloid:scaloid_2.11:3.6.1-10'
-    compile 'joda-time:joda-time:2.6'
-    compile 'com.facebook.android:facebook-android-sdk:3.21.1'
 }
