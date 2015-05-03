@@ -1,5 +1,6 @@
 package com.cosmicbirthday.entities
 
+import com.cosmicbirthday.R
 import com.cosmicbirthday.dbentities.Person
 import org.joda.time.DateTime
 

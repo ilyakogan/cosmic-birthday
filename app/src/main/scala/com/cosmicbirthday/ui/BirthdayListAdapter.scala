@@ -26,11 +26,7 @@ class BirthdayListAdapter(val context: Context, val values: Array[BirthdayListIt
                 val dateTextView = rowView.findViewById(R.id.date).asInstanceOf[TextView]
                 val imageView = rowView.findViewById(R.id.image).asInstanceOf[ImageView]
 
-                val ageText: String =
-                    if (birthday.person.name == Person.Me)
-                        context.getString(R.string.format_your_age, birthday.mnemonic)
-                    else
-                        context.getString(R.string.format_friend_age, birthday.person.name, birthday.mnemonic)
+                val ageText: String = new BirthdayFormatter(context).format(birthday)
 
                 nameTextView.setText(ageText)
                 dateTextView.setText(context.getString(R.string.format_on_date).

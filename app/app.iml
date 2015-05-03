@@ -92,8 +92,8 @@
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="scala-reflect-2.11.6" level="project" />
     <orderEntry type="library" exported="" name="scaloid_2.11-4.0-RC1" level="project" />
-    <orderEntry type="library" exported="" name="scala-library-2.11.6" level="project" />
     <orderEntry type="library" exported="" name="joda-time-2.6" level="project" />
+    <orderEntry type="library" exported="" name="scala-library-2.11.6" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-3.21.1" level="project" />
     <orderEntry type="library" exported="" name="joda-convert-1.7" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.2" level="project" />

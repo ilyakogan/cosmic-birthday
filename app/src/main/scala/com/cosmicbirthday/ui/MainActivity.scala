@@ -1,6 +1,9 @@
 package com.cosmicbirthday.ui
 
 import android.content.Intent
+import android.provider.CalendarContract
+import android.provider.CalendarContract.Events
+import android.view.MenuItem.OnMenuItemClickListener
 import android.view.{MenuItem, View}
 import android.widget._
 import com.cosmicbirthday.R
@@ -43,19 +46,30 @@ class MainActivity extends SActivity with AddOrEditPersonDialogTrait {
     def showShareMenu(anchorView: View, birthday: AbsoluteBirthday) {
         val menu = new PopupMenu(this, anchorView)
         menu.getMenuInflater.inflate(R.menu.share_menu, menu.getMenu)
+
         val shareItem = menu.getMenu.findItem(R.id.menu_item_share)
         val shareActionProvider = shareItem.getActionProvider.asInstanceOf[ShareActionProvider]
         menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener {
             override def onMenuItemClick(item: MenuItem): Boolean = {
                 val intent = new Intent(android.content.Intent.ACTION_SEND)
                 intent.setType("text/plain")
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.format_friend_age, birthday.person.name, birthday.mnemonic))
+                intent.putExtra(Intent.EXTRA_SUBJECT, new BirthdayFormatter(context).format(birthday))
                 intent.putExtra(Intent.EXTRA_TEXT, DateTimeFormat.mediumDate().print(birthday.date))
-
                 shareActionProvider.setShareIntent(intent)
                 true
             }
         })
+
+        val addToCalendarItem = menu.getMenu.findItem(R.id.menu_item_add_to_calendar)
+        addToCalendarItem.setOnMenuItemClickListener(new OnMenuItemClickListener {
+            override def onMenuItemClick(item: MenuItem): Boolean = {
+              val title = new BirthdayFormatter(context).format(birthday)
+              val intent = new CalendarIntentCreator().createIntentToInsertAllDayEvent(title, birthday.date)
+              startActivity(intent)
+              true
+            }
+        })
+
         menu.show()
     }
 
